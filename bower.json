@@ -1,0 +1,6 @@
+{
+  "name": "crpaste",
+  "dependencies": {
+    "highlightjs": "~8.8.0"
+  }
+}

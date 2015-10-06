@@ -1,0 +1,13 @@
+name: crpaste
+version: 0.1.0
+description: A simplistic, command line focused pastebin.
+authors:
+  - Jonne Haß <me@jhass.eu>
+license: MIT
+dependencies:
+  artanis:
+    github: ysbaddaden/artanis
+    branch: master
+  pg:
+    github: will/crystal-pg
+    branch: master

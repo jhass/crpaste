@@ -1,0 +1,12 @@
+/doc/
+/libs/
+/.crystal/
+/.shards/
+
+/node_modules/
+/bower_components/
+/tmp/
+/public/
+/.sass-cache/
+
+/crpaste
