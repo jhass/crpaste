@@ -27,4 +27,4 @@ BASE_URL="http://p.example.org" ./crpaste
 
 ## Usage
 
-See {src/crpaste.md}.
+See [usage](src/crpaste.md).
