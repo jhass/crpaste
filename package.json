@@ -10,6 +10,7 @@
     "grunt-bower-concat": "^0.5.0",
     "grunt-contrib-cssmin": "^0.14.0",
     "grunt-contrib-sass": "^0.9.2",
+    "grunt-contrib-uglify": "^0.9.2",
     "grunt-md": "0.0.2"
   }
 }
