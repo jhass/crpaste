@@ -51,7 +51,7 @@ module Crpaste
       expires_at = expire.seconds.from_now
       body       = request.body
       if body
-        paste = Paste.new(URI.unescape(body, StringIO.new).to_slice, expires_at, client_ip)
+        paste = Paste.new(URI.unescape(body, MemoryIO.new).to_slice, expires_at, client_ip)
         paste.make_private if query_params.has_key? "private"
         if paste.save
           id = paste.id.to_s(36)
