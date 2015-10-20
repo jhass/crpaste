@@ -47,7 +47,7 @@ module Crpaste
 
     post "/" do
       if query_params.has_key? "expire"
-        expire = parse_expire params["expire"]
+        expire = parse_expire query_params["expire"]
         return unprocessable("Invalid expire") unless expire
       else
         expire = EXPIRE_DEFAULT
