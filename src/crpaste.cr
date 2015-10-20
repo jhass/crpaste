@@ -28,11 +28,16 @@ module Crpaste
       static_file_handler.next = log_handler
       log_handler.next = Web
       server   = HTTP::Server.new(port) do |request|
-        path = request.path
-        if path && (path.empty? || path.ends_with? "/")
-          log_handler.call request
-        else
-          static_file_handler.call request
+        begin
+          path = request.path
+          if path && (path.empty? || path.ends_with? "/")
+            log_handler.call request
+          else
+            static_file_handler.call request
+          end
+        rescue e
+          e.inspect_with_backtrace(STDERR)
+          HTTP::Response.error "text/plain", "internal server error"
         end
       end
 
