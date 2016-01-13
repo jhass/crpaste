@@ -9,11 +9,11 @@ module Crpaste
     getter expires_at
     getter created_at
 
-    def self.find id
+    def self.find(id)
       find_with_token id, nil
     end
 
-    def self.find_with_token id, token
+    def self.find_with_token(id, token)
       result = Crpaste.db.exec(
         "SELECT id, content, expires_at, client_ip, token, owner_token, created_at
          FROM pastes
@@ -39,16 +39,16 @@ module Crpaste
       end
     end
 
-    def initialize @content : Slice(UInt8), @expires_at, @client_ip
+    def initialize(@content : Slice(UInt8), @expires_at, @client_ip)
     end
 
-    def initialize @id : Int32,
+    def initialize(@id : Int32,
                    @content : Slice(UInt8),
                    @expires_at,
                    @client_ip,
                    @token,
                    @owner_token,
-                   @created_at
+                   @created_at)
     end
 
     def private?
@@ -91,7 +91,7 @@ module Crpaste
       true
     end
 
-    def destroy_with_token token
+    def destroy_with_token(token)
       if owner_token == token
         destroy
       else

@@ -1,5 +1,6 @@
 require "http/server"
 require "uri"
+require "html"
 
 require "artanis"
 require "pg"
@@ -79,7 +80,7 @@ module Crpaste
       end
     end
 
-    private def parse_expire expire
+    private def parse_expire(expire)
       parsed = expire.match EXPIRE_FORMAT
       if parsed
         _, amount, unit = parsed
@@ -204,19 +205,19 @@ module Crpaste
       404
     end
 
-    private def unprocessable msg="Invalid submission"
+    private def unprocessable(msg="Invalid submission")
       status 422
       body msg
       422
     end
 
-    private def forbidden msg="Forbidden"
+    private def forbidden(msg="Forbidden")
       status 403
       body msg
       403
     end
 
-    private def bad_request msg="Bad request"
+    private def bad_request(msg="Bad request")
       status 400
       body msg
       400
