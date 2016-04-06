@@ -28,17 +28,19 @@ module Crpaste
       static_file_handler = HTTP::StaticFileHandler.new(File.join(__DIR__, "..", "public"))
       static_file_handler.next = log_handler
       log_handler.next = Web
-      server   = HTTP::Server.new(port) do |request|
+      server   = HTTP::Server.new(port) do |context|
         begin
-          path = request.path
+          path = context.request.path
           if path && (path.empty? || path.ends_with? "/")
-            log_handler.call request
+            log_handler.call context
           else
-            static_file_handler.call request
+            static_file_handler.call context
           end
         rescue e
           e.inspect_with_backtrace(STDERR)
-          HTTP::Response.error "text/plain", "internal server error"
+          context.response.status_code = 500
+          context.response.content_type = "text/plain"
+          context.response.puts "internal server error"
         end
       end
 
@@ -91,12 +93,14 @@ module Crpaste
 
     get "/:token/:id.txt" do
       find_paste(params["token"]) do |paste|
+        response.content_type = "text/plain; charset=utf8"
         paste.text
       end
     end
 
     get "/:token/:id.:format" do
       find_paste(params["token"]) do |paste|
+        response.content_type = "text/html; charset=utf8"
         ecr "paste"
       end
     end
@@ -109,12 +113,14 @@ module Crpaste
 
     get "/:id.txt" do
       find_paste do |paste|
+        response.content_type = "text/plain; charset=utf8"
         paste.text
       end
     end
 
     get "/:id.:format" do
       find_paste do |paste|
+        response.content_type = "text/html; charset=utf8"
         ecr "paste"
       end
     end
@@ -170,22 +176,8 @@ module Crpaste
 
     private def stream(data : Slice(UInt8))
       headers({"Content-Length" => data.size, "Content-Type": "application/octet-stream"})
-      stream_response do |io|
-        io.write data
-      end
+      response.write data
       200
-    end
-
-    private def stream_response(&block : IO ->)
-      r, w = IO.pipe
-      @response = HTTP::Response.new(200, nil, body_io: r)
-      spawn do
-        begin
-          block.call(w)
-        ensure
-          w.close
-        end
-      end
     end
 
     private def client_ip
