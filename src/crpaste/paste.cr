@@ -2,12 +2,13 @@ require "secure_random"
 
 module Crpaste
   class Paste
-    getter! id
-    getter content
-    getter client_ip
-    getter token
-    getter expires_at
-    getter created_at
+    getter! id : Int32
+    getter content : Slice(UInt8)
+    getter client_ip : String?
+    getter token : String?
+    getter expires_at : Time
+    getter created_at : Time?
+    @owner_token : String?
 
     def self.find(id)
       find_with_token id, nil
@@ -22,13 +23,13 @@ module Crpaste
       )
       unless result.rows.empty?
         row = result.to_hash.first
-        paste = new row["id"] as Int32,
-            row["content"] as Slice(UInt8),
-            row["expires_at"] as Time,
-            row["client_ip"] as String?,
-            row["token"] as String?,
-            row["owner_token"] as String,
-            row["created_at"] as Time
+        paste = new row["id"].as(Int32),
+            row["content"].as(Slice(UInt8)),
+            row["expires_at"].as(Time),
+            row["client_ip"].as(String?),
+            row["token"].as(String?),
+            row["owner_token"].as(String),
+            row["created_at"].as(Time)
 
         if paste.expired?
           paste.destroy

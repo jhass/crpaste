@@ -28,7 +28,8 @@ module.exports = function(grunt) {
     bower_concat: {
       all: {
         mainFiles: {
-          'highlightjs-line-numbers.js': ['dist/highlightjs-line-numbers.min.js']
+          'highlightjs-line-numbers.js': ['dist/highlightjs-line-numbers.min.js'],
+          'ago': ['ago.js', 'en.js']
         },
         dest: 'tmp/bower.js',
         cssDest: 'tmp/bower.css'

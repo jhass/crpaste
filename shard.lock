@@ -2,9 +2,9 @@ version: 1.0
 shards:
   artanis:
     github: ysbaddaden/artanis
-    commit: 19bd922bde15b0323c29109f183cfaca3d55fd77
+    commit: d432f9454fef26807befcb0f93fe8107c327782b
 
   pg:
     github: will/crystal-pg
-    commit: cafe38b532b859122337455aa09afeac4f8deeaa
+    version: 0.7.1
 

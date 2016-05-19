@@ -4,3 +4,6 @@
 <div class="variants">
   <a href="<%= paste_url(@paste, "txt") %>">Plain</a>
 </div>
+<div class="metadata">
+  Expires <span class="timeago"><%= @paste.try &.expires_at.to_utc.to_s("%FT%TZ") %></span>.
+</div>

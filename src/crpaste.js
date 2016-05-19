@@ -72,4 +72,10 @@ window.addEventListener("load", function() {
   for (var i = 0; i < anchors.length; ++i) {
     anchors[i].addEventListener("click", select);
   }
+
+  var timeago = ago(ago_cfgs.en);
+  var times = document.querySelectorAll(".timeago");
+  for (var i = 0; i < times.length; ++i) {
+    times[i].innerText = timeago(new Date(times[i].innerText));
+  }
 });

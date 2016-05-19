@@ -14,6 +14,8 @@ module Crpaste
   BASE_URL       = ENV["BASE_URL"]
   EXPIRE_DEFAULT = ENV["EXPIRES_DEFAULT"]?.try &.to_i || 6 * 3600 # 6 hours
 
+  @@db : PG::Connection?
+
   def self.db
     @@db ||= PG.connect("postgres:///#{ENV["DB"]? || "crpaste"}")
   end
@@ -27,7 +29,7 @@ module Crpaste
       log_handler = HTTP::LogHandler.new
       static_file_handler = HTTP::StaticFileHandler.new(File.join(__DIR__, "..", "public"))
       static_file_handler.next = log_handler
-      log_handler.next = Web
+      log_handler.next = -> (context : HTTP::Server::Context) { Web.call(context) }
       server   = HTTP::Server.new(port) do |context|
         begin
           path = context.request.path
@@ -47,6 +49,9 @@ module Crpaste
       puts "Crpaste listening on #{port}"
       server.listen
     end
+
+    @id : String?
+    @paste : Paste?
 
     post "/" do
       if query_params.has_key? "expire"
