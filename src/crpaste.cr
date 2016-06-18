@@ -6,6 +6,7 @@ require "artanis"
 require "pg"
 
 require "./crpaste/core_ext/enumerable"
+require "./crpaste/core_ext/named_tuple"
 require "./crpaste/core_ext/http/request"
 require "./crpaste/paste"
 require "./crpaste/version"

@@ -10,4 +10,4 @@ dependencies:
     branch: master
   pg:
     github: will/crystal-pg
-    version: 0.7.1
+    version: ~> 0.8.0
