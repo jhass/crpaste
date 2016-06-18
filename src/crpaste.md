@@ -39,7 +39,7 @@ Parameters:
 Example shell function:
 
 ```
-crpaste() { url="$(curl --data-urlencode @- "BASE_URL/?format=${${1:-txt}/,/&}")"; echo "$url"; }
+crpaste() { param="${1:-txt}"; url="$(curl --data-urlencode @- "BASE_URL/?format=${param/,/&}")"; echo "$url"; }
 ```
 
 ### Retrieve a paste
