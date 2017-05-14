@@ -38,7 +38,7 @@ module Crpaste
             static_file_handler.call context
           end
       }
-      server   = HTTP::Server.new(port) do |context|
+      server   = HTTP::Server.new("::", port) do |context|
         begin
           log_handler.call context
         rescue e
