@@ -5,6 +5,9 @@ authors:
   - Jonne Haß <me@jhass.eu>
 license: MIT
 crystal: 0.22.0
+targets:
+  crpaste: 
+    main: src/crpaste.cr
 dependencies:
   artanis:
     github: jhass/artanis
