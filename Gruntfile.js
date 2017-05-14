@@ -18,21 +18,24 @@ module.exports = function(grunt) {
         }
       },
     },
-    sass: {
-      dist: {
-        files: {
-          'tmp/<%= pkg.name %>.css': 'src/<%= pkg.name %>.scss'
-        }
-      }
-    },
     bower_concat: {
       all: {
         mainFiles: {
           'highlightjs-line-numbers.js': ['dist/highlightjs-line-numbers.min.js'],
-          'ago': ['ago.js', 'en.js']
+          'ago': ['ago.js', 'en.js'],
+          'highlightjs': ['highlight.pack.js', 'styles/github.css']
         },
-        dest: 'tmp/bower.js',
-        cssDest: 'tmp/bower.css'
+        dest: {
+          js: 'tmp/bower.js',
+          css: 'tmp/bower.scss'
+        }
+      }
+    },
+    sass: {
+      dist: {
+        files: {
+          'tmp/<%= pkg.name %>.css': 'src/<%= pkg.name %>.scss',
+        }
       }
     },
     uglify: {
@@ -59,6 +62,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-bower-concat');
 
-  grunt.registerTask('default', ['md', 'sass', 'bower_concat', 'uglify', 'cssmin']);
+  grunt.registerTask('default', ['md', 'bower_concat', 'sass', 'uglify', 'cssmin']);
 
 };

@@ -15,21 +15,19 @@ module Crpaste
     end
 
     def self.find_with_token(id, token)
-      result = Crpaste.db.exec(
+      result = Crpaste.db.query_one(
         "SELECT id, content, expires_at, client_ip, token, owner_token, created_at
          FROM pastes
          WHERE id = $1 AND (token IS NULL OR token = $2 OR owner_token = $2 OR $3)",
         [id, token, token == true]
-      )
-      unless result.rows.empty?
-        row = result.to_hash.first
-        paste = new row["id"].as(Int32),
-            row["content"].as(Slice(UInt8)),
-            row["expires_at"].as(Time),
-            row["client_ip"].as(String?),
-            row["token"].as(String?),
-            row["owner_token"].as(String),
-            row["created_at"].as(Time)
+      ) do |result|
+          paste = new result.read(Int32),
+              result.read(Slice(UInt8)),
+              result.read(Time),
+              result.read(String?),
+              result.read(String?),
+              result.read(String),
+              result.read(Time)
 
         if paste.expired?
           paste.destroy
@@ -81,14 +79,15 @@ module Crpaste
     end
 
     def save
-      result = Crpaste.db.exec({Int32, Time},
+      result = Crpaste.db.query_one(
         "INSERT INTO pastes (content, client_ip, token, owner_token, expires_at)
          VALUES ($1, $2, $3, $4, $5)
          RETURNING id, created_at AT TIME ZONE 'UTC' AS created_at",
         [content, client_ip, token, owner_token, expires_at]
-      ).rows.first
-      @id         = result[0]
-      @created_at = result[1]
+      ) do |result|
+        @id         = result.read(Int32)
+        @created_at = result.read(Time)
+      end
       true
     end
 

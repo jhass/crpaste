@@ -15,10 +15,10 @@ module Crpaste
   BASE_URL       = ENV["BASE_URL"]
   EXPIRE_DEFAULT = ENV["EXPIRES_DEFAULT"]?.try &.to_i || 6 * 3600 # 6 hours
 
-  @@db : PG::Connection?
+  @@db : DB::Database?
 
   def self.db
-    @@db ||= PG.connect("postgres:///#{ENV["DB"]? || "crpaste"}")
+    @@db ||= DB.open(ENV["DB"]? || "postgres:///crpaste")
   end
 
   class Web < Artanis::Application
@@ -29,16 +29,18 @@ module Crpaste
       port    = ENV["PORT"]?.try(&.to_i?) || 8000
       log_handler = HTTP::LogHandler.new
       static_file_handler = HTTP::StaticFileHandler.new(File.join(__DIR__, "..", "public"))
-      static_file_handler.next = log_handler
-      log_handler.next = -> (context : HTTP::Server::Context) { Web.call(context) }
-      server   = HTTP::Server.new(port) do |context|
-        begin
+      static_file_handler.next = -> (context : HTTP::Server::Context) { Web.call(context) }
+      log_handler.next = -> (context : HTTP::Server::Context) {
           path = context.request.path
           if path && (path.empty? || path.ends_with? "/")
-            log_handler.call context
+            Web.call(context)
           else
             static_file_handler.call context
           end
+      }
+      server   = HTTP::Server.new(port) do |context|
+        begin
+          log_handler.call context
         rescue e
           e.inspect_with_backtrace(STDERR)
           context.response.status_code = 500
@@ -64,8 +66,9 @@ module Crpaste
 
       expires_at = expire.seconds.from_now
       body       = request.body
-      if body
-        paste = Paste.new(URI.unescape(body, MemoryIO.new).to_slice, expires_at, client_ip)
+      body       = body.gets_to_end if body
+      if body && !body.empty?
+        paste = Paste.new(URI.unescape(body, IO::Memory.new).to_slice, expires_at, client_ip)
         paste.make_private if query_params.has_key? "private"
         if paste.save
           id = paste.id.to_s(36)
