@@ -15,7 +15,7 @@ module Crpaste
     end
 
     def self.find_with_token(id, token)
-      result = Crpaste.db.query_one(
+      result = Crpaste.db.query_one?(
         "SELECT id, content, expires_at, client_ip, token, owner_token, created_at
          FROM pastes
          WHERE id = $1 AND (token IS NULL OR token = $2 OR owner_token = $2 OR $3)",
