@@ -1,4 +1,4 @@
-require "secure_random"
+require "random/secure"
 
 module Crpaste
   class Paste
@@ -110,7 +110,7 @@ module Crpaste
     end
 
     private def generate_token
-      SecureRandom.uuid.delete('-')
+      Random::Secure.random_bytes(16).hexstring
     end
   end
 end

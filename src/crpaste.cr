@@ -38,7 +38,7 @@ module Crpaste
             static_file_handler.call context
           end
       }
-      server   = HTTP::Server.new("::", port) do |context|
+      server = HTTP::Server.new do |context|
         begin
           log_handler.call context
         rescue e
@@ -49,6 +49,7 @@ module Crpaste
         end
       end
 
+      server.bind_tcp("::", port)
       puts "Crpaste listening on #{port}"
       server.listen
     end

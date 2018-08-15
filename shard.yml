@@ -4,9 +4,9 @@ description: A simplistic, command line focused pastebin.
 authors:
   - Jonne Haß <me@jhass.eu>
 license: MIT
-crystal: 0.22.0
+crystal: 0.26.0
 targets:
-  crpaste: 
+  crpaste:
     main: src/crpaste.cr
 dependencies:
   artanis:
@@ -14,4 +14,4 @@ dependencies:
     branch: feature/lazy_body_params
   pg:
     github: will/crystal-pg
-    version: ~> 0.13.0
+    version: ~> 0.15.0
