@@ -69,7 +69,9 @@ module Crpaste
       body       = request.body
       body       = body.gets_to_end if body
       if body && !body.empty?
-        paste = Paste.new(URI.unescape(body, IO::Memory.new).to_slice, expires_at, client_ip)
+        io = IO::Memory.new
+        URI.decode(body, io)
+        paste = Paste.new(io.to_slice, expires_at, client_ip)
         paste.make_private if query_params.has_key? "private"
         if paste.save
           id = paste.id.to_s(36)

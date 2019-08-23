@@ -59,7 +59,7 @@ module Crpaste
     end
 
     def expired?
-      expires_at <= Time.now
+      expires_at <= Time.local
     end
 
     def persisted?
