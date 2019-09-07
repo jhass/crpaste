@@ -6,11 +6,11 @@
   "license": "MIT",
   "homepage": "https://github.com/jhass/crpaste",
   "devDependencies": {
-    "grunt": "^1.0.1",
+    "grunt": "^1.0.4",
     "grunt-bower-concat": "^1.0.0",
-    "grunt-contrib-cssmin": "^2.2.0",
+    "grunt-contrib-cssmin": "^3.0.0",
     "grunt-contrib-sass": "^1.0.0",
-    "grunt-contrib-uglify": "^3.0.0",
+    "grunt-contrib-uglify": "^4.0.1",
     "grunt-md": "0.0.4"
   }
 }

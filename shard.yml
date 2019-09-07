@@ -4,7 +4,7 @@ description: A simplistic, command line focused pastebin.
 authors:
   - Jonne Haß <me@jhass.eu>
 license: MIT
-crystal: 0.30.0
+crystal: 0.30.1
 targets:
   crpaste:
     main: src/crpaste.cr

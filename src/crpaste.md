@@ -46,7 +46,7 @@ crpaste() { param="${1:-txt}"; url="$(curl --data-urlencode @- "BASE_URL/?format
 
 #### `GET /<id>`
 
-Returns the raw paste with content type `application/octect-stream.
+Returns the raw paste with content type `application/octect-stream`.
 
 #### `GET /<id>.txt`
 
