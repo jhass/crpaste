@@ -27,7 +27,7 @@ module.exports = function(grunt) {
         },
         dest: {
           js: 'tmp/bower.js',
-          css: 'tmp/bower.scss'
+          css: 'tmp/bower.css'
         }
       }
     },
