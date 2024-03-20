@@ -1,7 +1,0 @@
-{
-  "name": "crpaste",
-  "dependencies": {
-    "highlightjs": "~9.12.0",
-    "ago": "master"
-  }
-}

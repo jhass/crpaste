@@ -1,6 +1,3 @@
----
-title: Usage - crpaste
----
 # crpaste
 
 A simplistic, command line focused pastebin.
@@ -38,8 +35,8 @@ Parameters:
 
 Example shell function:
 
-```
-crpaste() { param="${1:-txt}"; url="$(curl --data-urlencode @- "BASE_URL/?format=${param/,/&}")"; echo "$url"; }
+```sh
+crpaste() { param="${1:-txt}"; url="$(curl --data-urlencode @- "<BASE_URL>/?format=${param/,/&}")"; echo "$url"; }
 ```
 
 ### Retrieve a paste

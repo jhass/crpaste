@@ -4,7 +4,7 @@ description: A simplistic, command line focused pastebin.
 authors:
   - Jonne Haß <me@jhass.eu>
 license: MIT
-crystal: 0.34.0
+crystal: 1.11.2
 targets:
   crpaste:
     main: src/crpaste.cr
@@ -14,4 +14,4 @@ dependencies:
     branch: master
   pg:
     github: will/crystal-pg
-    version: ~> 0.21.0
+    version: ~> 0.28.0

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Usage - Crpaste</title>
+    <link href="/crpaste.min.css" rel="stylesheet" type="text/css" />
+    <script src="/crpaste.min.js" type="text/javascript"></script>
+    <script>
+      function replaceBaseUrl(node) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          node.nodeValue = node.nodeValue.replace("<BASE_URL>", window.location.origin)
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          for (let i = 0; i < node.childNodes.length; i++) {
+            replaceBaseUrl(node.childNodes[i])
+          }
+        }
+      }
+      document.addEventListener('DOMContentLoaded', function() {
+        replaceBaseUrl(document.body);
+      })
+    </script>
+  </head>
+  <body id="usage">
+    {{{content}}}
+  </body>
+</html>

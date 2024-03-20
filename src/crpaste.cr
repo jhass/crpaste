@@ -12,7 +12,6 @@ require "./crpaste/paste"
 require "./crpaste/version"
 
 module Crpaste
-  BASE_URL       = ENV["BASE_URL"]
   EXPIRE_DEFAULT = ENV["EXPIRES_DEFAULT"]?.try &.to_i || 6 * 3600 # 6 hours
 
   @@db : DB::Database?
@@ -70,7 +69,7 @@ module Crpaste
       body       = body.gets_to_end if body
       if body && !body.empty?
         io = IO::Memory.new
-        URI.decode(body, io)
+        URI.decode(body, io, plus_to_space: true)
         paste = Paste.new(io.to_slice, expires_at, client_ip)
         paste.make_private if query_params.has_key? "private"
         if paste.save
@@ -113,7 +112,10 @@ module Crpaste
     get "/:token/:id.:format" do
       find_paste(params["token"]) do |paste|
         response.content_type = "text/html; charset=utf8"
-        ecr "paste"
+        @paste = paste
+        ecr("paste")
+      ensure
+        @paste = nil
       end
     end
 
@@ -133,7 +135,10 @@ module Crpaste
     get "/:id.:format" do
       find_paste do |paste|
         response.content_type = "text/html; charset=utf8"
+        @paste = paste
         ecr "paste"
+      ensure
+        @paste = nil
       end
     end
 
@@ -158,25 +163,22 @@ module Crpaste
       end
     end
 
-    private def paste_url(paste, format=nil)
-      raise ArgumentError.new("no paste given") unless paste
-
-      format ||= query_params["format"] if query_params.has_key? "format"
-      url = BASE_URL
-      url = File.join url, paste.token.not_nil! if paste.private?
-      url = File.join url, paste.id.to_s(36)
-      url += ".#{format}" if format
-      url
+    private def paste_url(paste : Paste, format=nil)
+      String.build do |url|
+        url << (request.headers["X-Forwarded-Proto"]? || "http")
+        url << "://" << request.headers["Host"] << '/'
+        url << paste.token.not_nil! << '/' if paste.private?
+        url << paste.id.to_s(36)
+        url << '.' << query_params["format"] if query_params.has_key? "format"
+      end
     end
 
     private def find_paste(token=nil)
-      @id = params["id"]
       id = params["id"].to_i?(36)
       return bad_request "Invalid id" unless id
       paste = token.nil? ? Paste.find(id) : Paste.find_with_token(id, token)
       if paste
         begin
-          @paste = paste
           yield paste
         rescue InvalidByteSequenceError
           unprocessable "Not a UTF-8 paste"
@@ -187,16 +189,15 @@ module Crpaste
     end
 
     private def stream(data : Slice(UInt8))
-      headers({"Content-Length" => data.size, "Content-Type": "application/octet-stream"})
+      headers({"Content-Length": data.size, "Content-Type": "application/octet-stream"})
       response.write data
       200
     end
 
     private def client_ip
       headers = request.headers
-      {"CLIENT_IP", "X_FORWARDED_FOR", "X_FORWARDED", "X_CLUSTER_CLIENT_IP", "FORWARDED"}.find_value {|header|
-        dashed_header = header.tr("_", "-")
-        headers[header]? || headers[dashed_header]? || headers["HTTP_#{header}"]? || headers["Http-#{dashed_header}"]?
+      {"Client-Ip", "X-Forwarded-For", "X-Forwarded", "X-Cluster-Client-Ip", "Forwarded"}.find_value {|header|
+        headers[header]?
       }.try &.split(',').first
     end
 

@@ -1,48 +1,103 @@
-.hljs-line-numbers {
+#usage .hljs, #paste .hljs {
+  background-color: #f8f8f8;
 }
 
-.line-numbers {
-  text-align: right;
-  border-right: 1px solid #ccc;
-  color: #999;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  float: left;
+// .line-numbers {
+//   text-align: right;
+//   border-right: 1px solid #ccc;
+//   color: #999;
+//   -webkit-touch-callout: none;
+//   -webkit-user-select: none;
+//   -khtml-user-select: none;
+//   -moz-user-select: none;
+//   -ms-user-select: none;
+//   user-select: none;
+//   float: left;
 
-  a:visited {
-    color: blue;
+//   a:visited {
+//     color: blue;
+//   }
+
+//   a.selected {
+//     color: black;
+//     text-decoration: none;
+
+//     &:before {
+//       content: '> ';
+//       color: red;
+//       float: left;
+//     }
+//   }
+// }
+
+#usage {
+  padding: 3rem 5rem;
+}
+
+#paste {
+  width: 80vw;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+
+  h1 {
+    margin-bottom: 0.75rem;
   }
 
-  a.selected {
-    color: black;
-    text-decoration: none;
+  main {
+    display: flex;
+    flex-direction: row;
 
-    &:before {
-      content: '> ';
-      color: red;
-      float: left;
+    .line-numbers {
+      display: flex;
+      flex-direction: column;
+      padding: 8px;
+      user-select: none;
+      width: 34px;
+      text-align: right;
+      text-wrap: none;
+
+      a {
+        color: rgb(63, 63, 63);
+        text-decoration: none;
+        font-family: monospace;
+        font-size: 14px;
+
+        &.selected {
+          color: rgb(172, 29, 29);
+          display: flex;
+          flex-direction: row;
+          gap: 4px;
+
+          span {
+            flex-grow: 1
+          }
+
+          &:before {
+            content: '> ';
+            color: rgb(172, 29, 29);
+          }
+        }
+      }
+    }
+
+    pre {
+      margin: 0;
+      flex-grow: 1;
+    }
+
+    code {
+      padding: 8px;
+      font-size: 14px;
     }
   }
 }
 
-pre {
-  margin: 1rem 5rem;
-}
-
-h1 {
-  margin-left: 5rem;
-}
-
-.variants {
-  float: right;
-  margin-right: 5rem;
-}
-
-.metadata {
-  font-size: 0.8em;
-  margin-left: 5rem;
+footer {
+  font-size: 0.8rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  padding-left: 48px;
 }

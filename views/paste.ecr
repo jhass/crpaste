@@ -1,9 +1,24 @@
-<h1>#<%= @id %></h1>
-<pre><code class="hljs hljs-line-numbers line-numbers nohighlight"><% (@paste.try(&.text.lines.size) || 0).times do |i| %><a name="L<%= i+1 %>" href="#L<%= i+1 %>"><%= i+1 %></a>
-<% end %></code><code class="<%= params["format"]? %>"><%= HTML.escape @paste.try(&.text) || "" %></code></pre>
-<div class="variants">
-  <a href="<%= paste_url(@paste, "txt") %>">Plain</a>
-</div>
-<div class="metadata">
-  Expires <span class="timeago"><%= @paste.try &.expires_at.to_utc.to_s("%FT%TZ") %></span>.
-</div>
+<% paste = @paste.not_nil! %>
+
+<header>
+  <h1>#<%= paste.external_id %></h1>
+</header>
+
+<main>
+  <div class="line-numbers">
+  <%- paste.text.lines.size.times do |i| %>
+    <a name="L<%= i+1 %>" href="#L<%= i+1 %>"><span><%= i+1 %></span></a>
+  <%- end %>
+  </div>
+  <pre><code class='hljs <%= params["format"]? %>'><%= HTML.escape paste.text %></code></pre>
+</main>
+
+<footer>
+  <div class="variants">
+    <a href='<%= paste_url(paste, "txt") %>'>Plain</a>
+  </div>
+
+  <div class="metadata">
+    Expires <span class="timeago"><%= paste.expires_at.to_utc.to_s("%FT%TZ") %></span>.
+  </div>
+</footer>

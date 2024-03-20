@@ -6,10 +6,9 @@ A simplistic, command line focused pastebin.
 
 ```sh
 # Build assets
-gem install sass
-npm install
-bower install
-BASE_URL="http://p.example.org" grunt
+corepack install
+pnpm install
+pnpm run build
 
 # Build backend
 shards
@@ -22,9 +21,9 @@ psql crpaste < schema.sql
 # Run backend
 # Default port: 8000 Change by setting PORT
 # Default database: crpaste Change by setting DB
-BASE_URL="http://p.example.org" ./crpaste
+./crpaste
 ```
 
 ## Usage
 
-See [usage](src/crpaste.md).
+See [usage](src/usage.md).

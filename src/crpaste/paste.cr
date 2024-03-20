@@ -19,7 +19,7 @@ module Crpaste
         "SELECT id, content, expires_at, client_ip, token, owner_token, created_at
          FROM pastes
          WHERE id = $1 AND (token IS NULL OR token = $2 OR owner_token = $2 OR $3)",
-        [id, token, token == true]
+        id, token, token == true
       ) do |result|
           paste = new result.read(Int32),
               result.read(Slice(UInt8)),
@@ -48,6 +48,10 @@ module Crpaste
                    @token,
                    @owner_token,
                    @created_at)
+    end
+
+    def external_id
+      id.to_s(36)
     end
 
     def private?
@@ -83,7 +87,7 @@ module Crpaste
         "INSERT INTO pastes (content, client_ip, token, owner_token, expires_at)
          VALUES ($1, $2, $3, $4, $5)
          RETURNING id, created_at AT TIME ZONE 'UTC' AS created_at",
-        [content, client_ip, token, owner_token, expires_at]
+        content, client_ip, token, owner_token, expires_at
       ) do |result|
         @id         = result.read(Int32)
         @created_at = result.read(Time)
