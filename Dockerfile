@@ -15,7 +15,7 @@ RUN mkdir -p /app/crpaste; \
   shards build --release
 
 FROM alpine
-RUN apk add libevent openssl gc libgcc pcre2
+RUN apk add libevent openssl gc libgcc pcre2 tzdata
 COPY --from=frontend /app/public /app/public
 COPY --from=backend /app/bin /app/bin
 ENV PORT=8000
